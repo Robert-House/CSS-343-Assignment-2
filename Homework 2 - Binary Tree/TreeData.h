@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+
+using namespace std;
 
 class TreeData
 {
@@ -8,14 +11,18 @@ public:
 
 	// Accessors
 	char getChar() const;
-	unsigned int getOccurance() const;
+	int getOccurance() const;
 
-	bool operator==(const TreeData *other);
+	bool operator==(const TreeData *other) const;
 	bool operator!=(const TreeData *other);
 	bool operator<(const TreeData *other);
 	bool operator>(const TreeData *other);
+	friend ostream& operator<<(ostream &out, const TreeData &data);
+	TreeData& operator++();
+	TreeData& operator--();
+	void addOne();
 
 private:
 	char _char = ' ';
-	unsigned int _occurance = 0;
+	int _occurance = 0;
 };

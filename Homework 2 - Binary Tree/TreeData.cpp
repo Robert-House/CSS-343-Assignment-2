@@ -19,25 +19,14 @@ char TreeData::getChar() const
 	return _char;
 }
 
-unsigned int TreeData::getOccurance() const
+int TreeData::getOccurance() const
 {
 	return _occurance;
 }
 
-bool TreeData::operator==(const TreeData *other)
+bool TreeData::operator==(const TreeData *other) const
 {
-	// Check if the contained chars are equal.
-	if (_char == other->_char)
-	{
-		// Go one step further and check if the occurances
-		// match.
-		if (_occurance == other->_occurance)
-		{
-			return true;
-		}
-	}
-
-	return false;
+	return (_char == other->_char);
 }
 
 bool TreeData::operator!=(const TreeData *other)
@@ -61,4 +50,28 @@ bool TreeData::operator>(const TreeData *other)
 {
 	// Just use the < operator.
 	return operator<(other);
+}
+
+ostream& operator<<(ostream &out, const TreeData &data)
+{
+	out << "'" << data._char << ' ' << data._occurance << endl;
+
+	return out;
+}
+
+TreeData& TreeData::operator++()
+{
+	_occurance++;
+	return *this;
+}
+
+TreeData& TreeData::operator--()
+{
+	_occurance--;
+	return *this;
+}
+
+void TreeData::addOne()
+{
+	_occurance++;
 }
