@@ -9,6 +9,15 @@ TreeData::TreeData(char c)
 	_occurance = 1;
 }
 
+TreeData::TreeData(char c, int count)
+{
+	// Set char for this object on creation.
+	_char = c;
+
+	// This occurs at least once.
+	_occurance = count;
+}
+
 TreeData::~TreeData()
 {
 
@@ -54,7 +63,7 @@ bool TreeData::operator>(const TreeData *other)
 
 ostream& operator<<(ostream &out, const TreeData &data)
 {
-	out << "'" << data._char << ' ' << data._occurance << endl;
+	out << data._char << ' ' << data._occurance << endl;
 
 	return out;
 }
@@ -69,9 +78,4 @@ TreeData& TreeData::operator--()
 {
 	_occurance--;
 	return *this;
-}
-
-void TreeData::addOne()
-{
-	_occurance++;
 }

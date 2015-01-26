@@ -21,7 +21,7 @@ BSTree::BSTree(const BSTree &source)
 BSTree::~BSTree()
 {
 	// Its the only way to be sure.....
-	NukeItFromOrbit();
+	NukeItFromOrbit(_head);
 }
 
 // OPERATOR OVERLOADS
@@ -53,6 +53,8 @@ int BSTree::depth(const TreeData &data) const
 
 int BSTree::descendants(const TreeData &desc) const
 {
+	// Use retrieve to get the node
+	Node *decNode = retrieve(desc);
 	return -1;
 }
 
@@ -89,8 +91,15 @@ bool BSTree::remove(TreeData *data)
 	return rRemove(_head, data);
 }
 
+void BSTree::makeEmpty()
+{
+	// Needs some humor, its the only way to be sure
+	NukeItFromOrbit(_head);
+}
+
 ostream& operator<<(ostream &out, const BSTree &tree)
 {
+	// Pass outstream to recursive print function.
 	tree.print(tree._head, out);
 	return out;
 }
@@ -136,32 +145,39 @@ const TreeData* BSTree::rRetrieve(Node *node, const TreeData &data) const
 
 int BSTree::rDepth(Node *node, const TreeData &data, int depth) const
 {
+	// Return if not found
 	if (node == nullptr)
 	{
 		return -1;
 	}
-	else if (*node->item == &data)
+	
+	if (*node->item == &data)
 	{
 		return depth;
 	}
-	else if (&data < node->item)
+
+	int subsequentLevel = rDepth(node->left, data, depth + 1);
+
+	// If subsequent traversals return -1, it means that we have hit
+	// a nullptr. If not, we have found our data.
+	if (subsequentLevel != -1)
 	{
-		rDepth(node->left, data, depth + 1);
-	}
-	else if (&data > node->item)
-	{
-		rDepth(node->right, data, depth + 1);
+		return subsequentLevel;
 	}
 	
-	// Not found
-	return -1;
+	// Continue Traversing
+	return rDepth(node->right, data, depth + 1);
 }
 
 bool BSTree::rInsert(Node *node, TreeData *data)
 {
 	if (*node->item == data)
 	{
-		node->item->addOne();
+		// Nasty bug where the pointer wouuld be incremented
+		// rather than what it was pointed to. Parens fixed this.
+		(*node->item)++;
+
+		// No memory mapped
 		return false;
 	}
 	
@@ -195,6 +211,7 @@ bool BSTree::rInsert(Node *node, TreeData *data)
 		}
 	}
 
+	// Something went wrong
 	return false;
 }
 
@@ -202,7 +219,7 @@ bool BSTree::rRemove(Node *node, TreeData *data)
 {
 	if (node->item == data)
 	{
-		node->item--;
+		(*node->item)--;
 		return true;
 	}
 	else if (node->item < data)
@@ -220,15 +237,20 @@ bool BSTree::rRemove(Node *node, TreeData *data)
 	return false;
 }
 
-void BSTree::makeEmpty()
+void BSTree::NukeItFromOrbit(Node *node)
 {
-	// Needs some humor, its the only way to be sure
-	NukeItFromOrbit();
-}
+	if (node == nullptr)
+	{
+		return;
+	}
 
-bool BSTree::NukeItFromOrbit()
-{
-	return true;
+	// visit every node
+	NukeItFromOrbit(node->left);
+	NukeItFromOrbit(node->right);
+
+	// Nuke it from orbit, its the only way to be sure
+	delete node;
+	node = nullptr;
 }
 
 void BSTree::print(Node *node, ostream &out) const

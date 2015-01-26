@@ -7,6 +7,7 @@ class TreeData
 {
 public:
 	TreeData(char c);
+	TreeData(char c, int count);
 	~TreeData();
 
 	// Accessors

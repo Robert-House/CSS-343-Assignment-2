@@ -41,7 +41,7 @@ private:
 
 	Node *_head;
 	bool LoadFromFile(string filePath);
-	bool NukeItFromOrbit();
+	void NukeItFromOrbit(Node *node);
 	const TreeData* rRetrieve(Node *node, const TreeData &data) const;
 	int rDepth(Node *node, const TreeData &data, int depth) const;
 	bool rInsert(Node* node, TreeData *data);

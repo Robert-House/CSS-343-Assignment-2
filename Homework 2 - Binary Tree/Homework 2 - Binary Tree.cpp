@@ -5,11 +5,16 @@
 #include <iostream>
 #include "BSTree.h"
 
+using namespace std;
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	BSTree *temp = new BSTree("test.txt");
-	std::cout << *temp;
+	//cout << *temp;
+	TreeData *data = new TreeData(' ');
+	cout << temp->depth(*data);
+	temp->makeEmpty();
 	return 0;
 }
 
